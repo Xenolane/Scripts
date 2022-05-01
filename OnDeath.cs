@@ -9,16 +9,28 @@ using TMPro;
 
 public class OnDeath : MonoBehaviour
 {
-    public WaveSpawner gameManager;
+    public WaveSpawner waveSpawner;
     public PlayerPoints playerPoint;
     public GameObject character;
-    private void Awake()
-    {
-        FindObjectOfType<PlayerPoints>();
-    }
+    
     public void DeathEvent()
     {
-        gameManager.enemiesAlive--;
-        playerPoint.currentPoints += 50;
+        WaveSpawner.instance.EnemyDeath();
+        Destroy(gameObject, 10);
     }
+
+    public void Points()
+    {
+        PlayerPoints.instance.AddPoints();
+    }
+
+    public void CritPoints()
+    {
+        PlayerPoints.instance.AddCriticalPoints();
+    }
+
+    public void DeathPoints()
+    {
+        PlayerPoints.instance.AddDeathPoints();
+    }    
 }

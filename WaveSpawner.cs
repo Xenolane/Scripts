@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
 {
+    public static WaveSpawner instance;
     [Header("Wave Stats")]
     public Wave[] waves;
 
@@ -35,6 +36,7 @@ public class WaveSpawner : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         //Calculates current wave
         currentWave = waves[i];
         timeBtwnSpawns = currentWave.TimeBeforeThisWave;
@@ -72,12 +74,16 @@ public class WaveSpawner : MonoBehaviour
             int num2 = Random.Range(0, spawnpoints.Length);
 
             Instantiate(currentWave.EnemiesInWave[num], spawnpoints[num2].position, spawnpoints[num2].rotation);
-            currentWave.EnemiesInWave[num].GetComponent<OnDeath>().gameManager = GetComponent<WaveSpawner>();
+            currentWave.EnemiesInWave[num].GetComponent<OnDeath>().waveSpawner = GetComponent<WaveSpawner>();
             
             enemiesAlive++;
         }
     }
 
+    public void EnemyDeath()
+    {
+        enemiesAlive--;
+    }
     private void IncWave()
     {
         if (i + 1 < waves.Length)
